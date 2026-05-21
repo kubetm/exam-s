@@ -14,5 +14,6 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: busybox
-          command: ['sh', '-c', 'while true; do sleep 3600; done']
+          image: 1pro/exam
+          ports:
+            - containerPort: 8080

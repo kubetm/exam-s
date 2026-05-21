@@ -4,7 +4,7 @@ metadata:
   name: test-pod
   namespace: prod
   labels:
-    app: agent
+    app: test
 spec:
   containers:
     - name: test
