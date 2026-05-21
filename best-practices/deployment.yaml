@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: couchdb
+  namespace: default
+  labels:
+    app: couchdb
+    version: stable
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: couchdb
+      version: stable
+  template:
+    metadata:
+      labels:
+        app: couchdb
+    spec:
+      containers:
+        - name: couchdb
+          image: demo:v1
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /healthCheck
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 5
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: database-storage
+              mountPath: /var/lib/database
+          securityContext:
+            runAsUser: 65535
+            readOnlyRootFilesystem: false
+            privileged: false
+            capabilities:
+              drop:
+                - "all"
+              add:
+                - NET_BIND_SERVICE
+          resources:
+            limits:
+              cpu: 300m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 100Mi
+      volumes:
+        - name: database-storage
+          emptyDir: {}
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-demo-2
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+    - name: sec-ctx-demo-2
+      image: gcr.io/google-samples/node-hello:1.0
+      securityContext:
+        runAsUser: 0
+        privileged: True
+        allowPrivilegeEscalation: false
