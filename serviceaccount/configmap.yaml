@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: log-retriever-script
+  namespace: monitoring
+data:
+  retrieve-logs.sh: |
+    #!/bin/sh
+    NAMESPACE="kube-system"
+    POD_NAME="kube-stats"
+    CONTAINER_NAME="memory"
+    TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+    KBS_API_SERVER="https://kubernetes.default.svc.cluster.local"
+
+    curl -sk -H "Authorization: Bearer $TOKEN" \
+      "$KBS_API_SERVER/api/v1/namespaces/$NAMESPACE/pods/$POD_NAME/log?container=$CONTAINER_NAME&since=10s"

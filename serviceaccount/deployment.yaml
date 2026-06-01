@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stats-monitor
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stats-monitor
+  template:
+    metadata:
+      labels:
+        app: stats-monitor
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: log-retriever
+          image: 1pro/exam
+          command: ["/bin/sh"]
+          args:
+            - "-c"
+            - "while true; do /scripts/retrieve-logs.sh; sleep 10; done"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: scripts-volume
+              mountPath: /scripts
+      serviceAccountName: stats-monitor-sa
+    volumes:
+      - name: scripts-volume
+        configMap:
+          name: log-retriever-script
+          defaultMode: 511
