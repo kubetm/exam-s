@@ -27,8 +27,8 @@ spec:
             - name: scripts-volume
               mountPath: /scripts
       serviceAccountName: stats-monitor-sa
-    volumes:
-      - name: scripts-volume
-        configMap:
-          name: log-retriever-script
-          defaultMode: 511
+      volumes:
+        - name: scripts-volume
+          configMap:
+            name: log-retriever-script
+            defaultMode: 0777
