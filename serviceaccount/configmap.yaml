@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: log-retriever-script
+  name: log-script
   namespace: monitoring
 data:
   retrieve-logs.sh: |
     #!/bin/sh
     NAMESPACE="kube-system"
-    POD_NAME="kube-stats"
-    CONTAINER_NAME="memory"
+    POD_NAME="kube-scheduler-cks-master"
+    CONTAINER_NAME="kube-scheduler"
     TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
     KBS_API_SERVER="https://kubernetes.default.svc.cluster.local"
 

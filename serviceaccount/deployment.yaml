@@ -30,5 +30,5 @@ spec:
       volumes:
         - name: scripts-volume
           configMap:
-            name: log-retriever-script
+            name: log-script
             defaultMode: 0777
