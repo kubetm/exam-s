@@ -4,4 +4,4 @@ metadata:
   name: stats-monitor-sa
   namespace: monitoring
 secrets:
-  - name: stats-monitor-sa-token
+  - name: sa-token
