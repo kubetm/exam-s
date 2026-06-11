@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Config
 clusters:
-- name: anon
+- name: anonymous
   cluster:
     server: https://127.0.0.1:6443
     insecure-skip-tls-verify: true
