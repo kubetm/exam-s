@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Config
+preferences: {}
+clusters:
+  - cluster:
+      certificate-authority: /etc/kubernetes/bouncer/webhook.pem
+      server: https://smooth-yak.local/review
+    name: bouncer-webhook
+contexts:
+  - context:
+      cluster: bouncer-webhook
+      user: api-server
+    name: bouncer-webhook
+current-context: bouncer-webhook
+users:
+  - name: api-server
+    user:
+      client-certificate: /etc/kubernetes/bouncer/apiserver-client.pem
+      client-key: /etc/kubernetes/bouncer/apiserver-client-key.pem
