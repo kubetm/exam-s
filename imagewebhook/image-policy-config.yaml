@@ -1,1 +1,8 @@
-# ImagePolicyWebhook supplementary configuration file
+apiVersion: imagepolicy.k8s.io/v1alpha1
+kind: ImagePolicyConfiguration
+imagePolicy:
+  kubeConfigFile: /etc/kubernetes/bouncer/kube-config.yaml
+  allowTTL: 50
+  denyTTL: 50
+  retryBackoff: 500
+  defaultAllow: true

@@ -4,7 +4,7 @@ preferences: {}
 clusters:
   - cluster:
       certificate-authority: /etc/kubernetes/bouncer/webhook.pem
-      server: https://smooth-yak.local/review
+      server: ""
     name: bouncer-webhook
 contexts:
   - context:
