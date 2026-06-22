@@ -3,8 +3,8 @@ const fs = require('fs');
 
 // 1. 인증서 로드 (경로 확인 필수)
 const options = {
-  key: fs.readFileSync('/home/candidate/webhook/key.pem'),
-  cert: fs.readFileSync('/home/candidate/webhook/cert.pem')
+  key: fs.readFileSync('/home/candidate/imagechecker/key.pem'),
+  cert: fs.readFileSync('/home/candidate/imagechecker/cert.pem')
 };
 
 // 2. 서버 생성
