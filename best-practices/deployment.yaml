@@ -2,17 +2,13 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: couchdb
-  namespace: default
   labels:
     app: couchdb
-    version: stable
 spec:
   replicas: 1
-  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: couchdb
-      version: stable
   template:
     metadata:
       labels:
@@ -20,25 +16,24 @@ spec:
     spec:
       containers:
         - name: couchdb
-          image: demo:v1
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            httpGet:
-              path: /healthCheck
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 30
-            successThreshold: 1
-            failureThreshold: 5
+          image: couchdb:3.3.3
+          imagePullPolicy: Always
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldPath: status.podIP
+            - name: ERL_FLAGS
+              value: "-name couchdb@$(POD_IP) -setcookie 9dsafjasjf390dkljfaldjfkfd233"
+            - name: COUCHDB_USER
+              value: "1pro"
+            - name: COUCHDB_PASSWORD
+              value: "admin"
           ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
-          volumeMounts:
-            - name: database-storage
-              mountPath: /var/lib/database
+            - name: couchdb
+              containerPort: 5984
+            - name: epmd
+              containerPort: 4369
+            - containerPort: 9100
           securityContext:
             runAsUser: 65535
             readOnlyRootFilesystem: false
@@ -50,28 +45,24 @@ spec:
                 - NET_BIND_SERVICE
           resources:
             limits:
-              cpu: 300m
-              memory: 500Mi
+              cpu: "1"
+              memory: "512Mi"
             requests:
-              cpu: 100m
-              memory: 100Mi
+              cpu: "256m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /healthCheck
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 5
+          volumeMounts:
+            - name: database-storage
+              mountPath: /var/lib/database
       volumes:
         - name: database-storage
           emptyDir: {}
-
----
-
-apiVersion: v1
-kind: Pod
-metadata:
-  name: security-context-demo-2
-spec:
-  securityContext:
-    runAsUser: 1000
-  containers:
-    - name: sec-ctx-demo-2
-      image: gcr.io/google-samples/node-hello:1.0
-      securityContext:
-        runAsUser: 0
-        privileged: True
-        allowPrivilegeEscalation: false
