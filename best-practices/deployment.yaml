@@ -50,19 +50,3 @@ spec:
             requests:
               cpu: "256m"
               memory: "256Mi"
-          livenessProbe:
-            httpGet:
-              path: /healthCheck
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
-            periodSeconds: 30
-            successThreshold: 1
-            failureThreshold: 5
-          volumeMounts:
-            - name: database-storage
-              mountPath: /var/lib/database
-      volumes:
-        - name: database-storage
-          emptyDir: {}
