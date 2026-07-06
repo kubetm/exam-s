@@ -26,8 +26,8 @@ spec:
               mountPath: /var/cache/nginx
             - name: cache-volume
               mountPath: /var/run
-        - name: php
-          image: php:8-fpm-alpine
+        - name: app
+          image: 1pro:exam
       volumes:
         - name: cache-volume
           emptyDir: {}
