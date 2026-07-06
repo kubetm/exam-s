@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lamp-deployment
+  namespace: lamp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finer-sunbeam
+  template:
+    metadata:
+      labels:
+        app: finer-sunbeam
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          env:
+            - name: NGINX_PORT
+              value: "8080"
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: cache-volume
+              mountPath: /var/cache/nginx
+            - name: cache-volume
+              mountPath: /var/run
+        - name: php
+          image: php:8-fpm-alpine
+      volumes:
+        - name: cache-volume
+          emptyDir: {}
