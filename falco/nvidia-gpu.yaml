@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nvidia-gpu
+  labels:
+    app: ollama
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+      provider: nvidia-gpu
+  template:
+    metadata:
+      labels:
+        app: ollama
+        provider: nvidia-gpu
+    spec:
+      containers:
+        - name: ollama
+          image: ollama/ollama:0.1.47
+          ports:
+            - containerPort: 11434
+          securityContext:
+            privileged: true

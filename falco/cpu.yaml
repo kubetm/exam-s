@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu
+  labels:
+    app: ollama
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+      provider: cpu
+  template:
+    metadata:
+      labels:
+        app: ollama
+        provider: cpu
+    spec:
+      containers:
+        - name: ollama
+          image: ollama/ollama:0.1.47
+          ports:
+            - containerPort: 11434
+          securityContext:
+            privileged: true
