@@ -1,0 +1,6 @@
+- rule: Container Accesses /dev/mem
+  desc: 컨테이너가 /dev/mem에 접근하는 행위 감지
+  condition: container.id != host and evt.type in (open, openat, openat2) and fd.name = /dev/mem
+  output: 민감한 메모리 접근 감지 (user=%user.name container_id=%container.id file=%fd.name)
+  priority: CRITICAL
+  tags: [container, filesystem]
