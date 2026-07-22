@@ -27,7 +27,7 @@ spec:
             - name: cache-volume
               mountPath: /var/run
         - name: app
-          image: 1pro:exam
+          image: 1pro/exam
       volumes:
         - name: cache-volume
           emptyDir: {}
